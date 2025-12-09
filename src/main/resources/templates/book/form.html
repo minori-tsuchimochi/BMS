@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>蔵書登録</title>
+</head>
+<body>
+
+<h2>蔵書登録</h2>
+
+<form th:action="@{/admin/books/save}" th:object="${book}" method="post">
+    <input type="hidden" th:field="*{id}">
+
+    <div>
+        <label>書名</label>
+        <input type="text" th:field="*{title}" required>
+    </div>
+
+    <div>
+        <label>著者</label>
+        <input type="text" th:field="*{author}" required>
+    </div>
+
+    <div>
+        <label>出版社</label>
+        <input type="text" th:field="*{publisher}">
+    </div>
+
+    <div>
+        <label>ISBN</label>
+        <input type="text" th:field="*{isbn}">
+    </div>
+
+    <div>
+        <label>在庫数</label>
+        <input type="number" th:field="*{stock}" required min="0">
+    </div>
+
+    <button type="submit">保存</button>
+</form>
+
+</body>
+</html>

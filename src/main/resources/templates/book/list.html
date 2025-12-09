@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>蔵書一覧</title>
+</head>
+<body>
+<h2>蔵書一覧</h2>
+
+<form method="get" th:action="@{/admin/books}">
+    <input type="text" name="keyword" placeholder="書名・著者で検索">
+    <button type="submit">検索</button>
+</form>
+
+<a th:href="@{/admin/books/new}">新規登録</a>
+
+<table border="1">
+    <tr>
+        <th>書名</th>
+        <th>著者</th>
+        <th>在庫</th>
+        <th>操作</th>
+    </tr>
+
+    <tr th:each="book : ${books}">
+        <td th:text="${book.title}"></td>
+        <td th:text="${book.author}"></td>
+        <td th:text="${book.stock}"></td>
+        <td>
+            <a th:href="@{/admin/books/edit/{id}(id=${book.id})}">編集</a>
+            <a th:href="@{/admin/books/delete/{id}(id=${book.id})}">削除</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
