@@ -14,11 +14,13 @@
     <div>
         <label>書名</label>
         <input type="text" th:field="*{title}" required>
+        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color:red"></div>
     </div>
 
     <div>
         <label>著者</label>
         <input type="text" th:field="*{author}" required>
+        <div th:if="${#fields.hasErrors('author')}" th:errors="*{author}" style="color:red"></div>
     </div>
 
     <div>
@@ -29,11 +31,13 @@
     <div>
         <label>ISBN</label>
         <input type="text" th:field="*{isbn}">
+        <div th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}" style="color:red"></div>
     </div>
 
     <div>
         <label>在庫数</label>
         <input type="number" th:field="*{stock}" required min="0">
+        <div th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}" style="color:red"></div>
     </div>
 
     <button type="submit">保存</button>

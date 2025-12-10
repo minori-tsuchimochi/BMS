@@ -4,6 +4,8 @@ import com.example.bms.entity.Book;
 import com.example.bms.repository.BookRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -36,12 +38,17 @@ public class BookController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Book book) {
+    public String save(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("book", book);
+            return "book/form";
+        }
+
         bookRepository.save(book);
         return "redirect:/admin/books";
     }
 
-    @PostMapping("/edit/{id}")
+    @GetMapping("/edit/{id}")
     public String edit(@PathVariable Long id, Model model) {
         Book book = bookRepository.findById(id).orElseThrow();
         model.addAttribute("book", book);
