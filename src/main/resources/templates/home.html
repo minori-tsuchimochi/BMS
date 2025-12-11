@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
 </head>
 <body>
     <h1>BMS HOME!</h1>
+
+    <div sec:authorize="hasRole('ADMIN')">
+        <a href="/admin/books">蔵書管理ページ📚</a>
+    </div>
+
     <a th:href="@{/logout}">Log out</a>
 </body>
 </html>

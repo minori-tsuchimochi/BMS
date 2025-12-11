@@ -1,6 +1,6 @@
 package com.example.bms.config;
 
-import com.example.bms.service.UserDetailServiceImpl;
+import com.example.bms.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -8,14 +8,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import  org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfig {
 
-    private final UserDetailServiceImpl userDetailService;
+    private final UserDetailsServiceImpl userDetailService;
 
-    public SecurityConfig(UserDetailServiceImpl userDetailService) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailService) {
         this.userDetailService = userDetailService;
     }
 
@@ -38,6 +37,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register", "/login").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/books/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
