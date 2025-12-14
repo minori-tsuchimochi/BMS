@@ -39,10 +39,6 @@ public class BookController {
 
     @PostMapping("/save")
     public String save(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model) {
-        if (book.getTotalStock() == null) {
-            book.setTotalStock(book.getStock());
-        }
-
         if (bindingResult.hasErrors()) {
             model.addAttribute("book", book);
             return "book/form";

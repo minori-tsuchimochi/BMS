@@ -33,9 +33,4 @@ public class Book {
     @NotNull(message = "在庫数は必須です")
     @Min(value = 0, message = "在庫数は0以上で入力してください")
     private Integer stock;
-
-    @Column(nullable = false)
-    @NotNull(message = "総冊数は必須です")
-    @Min(value = 0, message = "総冊数は0以上で入力してください")
-    private Integer totalStock;
 }

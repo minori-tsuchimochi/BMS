@@ -8,6 +8,7 @@ import com.example.bms.repository.LoanHistoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class LoanService {
@@ -39,11 +40,16 @@ public class LoanService {
 
     @Transactional
     public void returnBook(Book book) {
-        LoanHistory history = loanHistoryRepository
-                .findByBookAndReturnDateIsNull(book)
-                .orElseThrow(() -> new IllegalStateException("貸出履歴が見つかりません"));
+        List<LoanHistory> histories = loanHistoryRepository.findByBookAndReturnDateIsNull(book);
 
+        if (histories.isEmpty()) {
+            throw new IllegalStateException("貸出履歴が見つかりません");
+        }
+
+        LoanHistory history = histories.get(histories.size() - 1);
         history.setReturnDate(LocalDate.now());
+        loanHistoryRepository.save(history);
         book.setStock(book.getStock() + 1);
+        bookRepository.save(book);
     }
 }
