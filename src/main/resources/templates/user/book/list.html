@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>一般ユーザー用</title>
+</head>
+<body>
+<h2>蔵書一覧</h2>
+<table>
+    <tr>
+        <th>書名</th>
+        <th>著者</th>
+        <th>在庫</th>
+        <th>状態</th>
+        <th>操作</th>
+    </tr>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.title}"></td>
+        <td th:text="${book.author}"></td>
+        <td th:text="${book.stock}"></td>
+
+        <td th:text="${book.stock == 0 ? '貸出不可' : (book.userHasLoaned ? '貸出中' : '貸出可能')}"
+            th:classappend="${book.stock == 0 ? 'unavailable' : (book.userHasLoaned ? 'unavailable' : 'available')}">
+
+        </td>
+
+        <td>
+            <form th:action="@{/books/{id}/loan(id=${book.id})}" method="post" style="display:inline;">
+                <button type="submit" th:disabled="${book.stock == 0 or book.userHasLoaned}">貸出</button>
+            </form>
+            <form th:action="@{/books/{id}/return(id=${book.id})}" method="post" style="display:inline;">
+                <button type="submit" th:disabled="${!book.userHasLoaned}">返却</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<a th:href="@{/}">ホームに戻る</a>
+
+</body>
+</html>

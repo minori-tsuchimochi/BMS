@@ -33,4 +33,7 @@ public class Book {
     @NotNull(message = "在庫数は必須です")
     @Min(value = 0, message = "在庫数は0以上で入力してください")
     private Integer stock;
+
+    @Transient
+    private boolean userHasLoaned;
 }

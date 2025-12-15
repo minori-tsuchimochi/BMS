@@ -12,6 +12,10 @@
         <a href="/admin/books">蔵書管理ページ📚</a>
     </div>
 
+    <div sec:authorize="hasRole('USER')">
+        <a href="/books">蔵書一覧📚</a>
+    </div>
+
     <a th:href="@{/logout}">Log out</a>
 </body>
 </html>

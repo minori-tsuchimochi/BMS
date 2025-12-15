@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface LoanHistoryRepository extends JpaRepository<LoanHistory, Long> {
     List<LoanHistory> findByBookAndReturnDateIsNull(Book book);
+
+    boolean existsByBookAndUserAndReturnDateIsNull(Book book, User user);
 }
