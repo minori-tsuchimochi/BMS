@@ -4,6 +4,7 @@ import com.example.bms.entity.Book;
 import com.example.bms.entity.LoanHistory;
 import com.example.bms.entity.User;
 import com.example.bms.repository.BookRepository;
+import com.example.bms.repository.UserRepository;
 import com.example.bms.repository.LoanHistoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +15,12 @@ import java.util.List;
 public class LoanService {
     private final BookRepository bookRepository;
     private final LoanHistoryRepository loanHistoryRepository;
+    private final UserRepository userRepository;
 
-    public LoanService(BookRepository bookRepository, LoanHistoryRepository loanHistoryRepository) {
+    public LoanService(BookRepository bookRepository, LoanHistoryRepository loanHistoryRepository, UserRepository userRepository) {
         this.bookRepository = bookRepository;
         this.loanHistoryRepository = loanHistoryRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -52,4 +55,29 @@ public class LoanService {
         book.setStock(book.getStock() + 1);
         bookRepository.save(book);
     }
+
+    @Transactional
+    public void loan(Long bookId, Long userId, LocalDate dueDate) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("書籍が存在しません"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("ユーザーが存在しません"));
+
+        if (book.getStock() <= 0) {
+            throw new IllegalStateException("在庫がありません");
+        }
+
+        book.setStock(book.getStock() - 1);
+
+        LoanHistory history = new LoanHistory();
+        history.setBook(book);
+        history.setUser(user);
+        history.setLoanDate(LocalDate.now());
+        history.setDueDate(dueDate);
+
+        bookRepository.save(book);
+        loanHistoryRepository.save(history);
+    }
+
 }

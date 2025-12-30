@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>貸出登録</title>
+</head>
+<body>
+
+<h1>貸出登録</h1>
+
+<form th:action="@{/admin/loans}" method="post">
+
+    <input type="hidden" name="bookId" th:value="${book.id}">
+
+    <div>
+        <label>書名</label>
+        <span th:text="${book.title}"></span>
+    </div>
+
+    <div>
+        <label>利用者</label>
+        <select name="userId" required>
+            <option value="">-- 利用者を選択 --</option>
+            <option th:each="user : ${users}"
+                    th:value="${user.id}"
+                    th:text="${user.username}">
+            </option>
+        </select>
+    </div>
+
+    <div>
+        <label>返却期限</label>
+        <input type="date" name="dueDate" required>
+    </div>
+
+    <button type="submit">貸出する</button>
+
+</form>
+
+<br>
+<a th:href="@{/admin/books}">蔵書一覧に戻る📚</a>
+
+</body>
+</html>

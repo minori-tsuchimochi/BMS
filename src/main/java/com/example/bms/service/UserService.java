@@ -4,6 +4,7 @@ import com.example.bms.entity.User;
 import com.example.bms.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -28,5 +29,9 @@ public class UserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("ユーザーが見つかりません"));
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }

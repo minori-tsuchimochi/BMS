@@ -6,13 +6,13 @@ import com.example.bms.repository.BookRepository;
 import com.example.bms.service.LoanService;
 import com.example.bms.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.ui.Model;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/admin")
@@ -71,20 +71,24 @@ public class AdminLoanController {
         return "redirect:/admin/books";
     }
 
-    @PostMapping("/books/loan/{bookId}")
-    public String loan(@PathVariable Long bookId, Authentication authentication) {
+    @GetMapping("/loans/new/{bookId}")
+    public String loanForm(@PathVariable Long bookId, Model model) {
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("書籍が存在しません"));
-        User user = userService.findByUsername(authentication.getName());
-        loanService.loan(book, user);
-        return "redirect:/admin/books";
+                .orElseThrow(() -> new IllegalArgumentException("書籍が存在しません。"));
+        List<User> users = userService.findAll();
+
+        model.addAttribute("book", book);
+        model.addAttribute("users", users);
+        return "admin/loan/form";
     }
 
-    @PostMapping("/books/return/{bookId}")
-    public String returnBook(@PathVariable Long bookId) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("書籍が存在しません"));
-        loanService.returnBook(book);
+    @PostMapping("/loans")
+    public String loan(
+            @RequestParam Long bookId,
+            @RequestParam Long userId,
+            @RequestParam String dueDate
+    ) {
+        loanService.loan(bookId, userId, LocalDate.parse(dueDate));
         return "redirect:/admin/books";
     }
 

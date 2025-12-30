@@ -29,6 +29,10 @@
         <td>
             <a th:href="@{/admin/books/edit/{id}(id=${book.id})}">編集</a>
             <a th:href="@{/admin/books/delete/{id}(id=${book.id})}">削除</a>
+
+            <span th:if="${book.stock > 0}">
+                <a th:href="@{/admin/loans/new/{bookId}(bookId=${book.id})}">貸出</a>
+            </span>
         </td>
     </tr>
 </table>

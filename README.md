@@ -1,4 +1,4 @@
-# BMS (Book Management System)<br>研修成果物 仕様書
+ # BMS (Book Management System)<br>研修成果物 仕様書
 
 ## 1. 概要
 本システムは、図書館や社内図書コーナーにおける蔵書の

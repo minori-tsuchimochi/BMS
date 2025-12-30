@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>貸出履歴</title>
+    <style>
+        .status-loan {
+            color: red;
+            font-weight: bold;
+        }
+
+        .status-returned {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-overdue {
+            color: orange;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>貸出履歴一覧</h1>
+
+<table border="1">
+    <tr>
+        <th>書名</th>
+        <th>貸出日</th>
+        <th>返却期限</th>
+        <th>返却日</th>
+        <th>状態</th>
+    </tr>
+
+    <tr th:each="history : ${histories}">
+        <td th:text="${history.book.title}"></td>
+        <td th:text="${history.loanDate}"></td>
+        <td th:text="${history.dueDate}"></td>
+        <td th:text="${history.returnDate != null ? history.returnDate : '-'}"></td>
+        <td>
+            <span th:if="${history.returnDate == null}" class="status-loan">貸出中</span>
+
+            <span th:if="${history.returnDate != null}" class="status-returned">返却済</span>
+        </td>
+    </tr>
+</table>
+
+<br>
+<a th:href="@{/books}">蔵書一覧へ</a>
+</body>
+</html>
