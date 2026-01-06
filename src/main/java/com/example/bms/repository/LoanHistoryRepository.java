@@ -5,9 +5,12 @@ import com.example.bms.entity.Book;
 import com.example.bms.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
+import java.util.Optional;
 
 public interface LoanHistoryRepository extends JpaRepository<LoanHistory, Long> {
     List<LoanHistory> findByBookAndReturnDateIsNull(Book book);
     List<LoanHistory> findByUserOrderByLoanDateDesc(User user);
+    List<LoanHistory> findByReturnDateIsNullOrderByLoanDateAsc();
+    Optional<LoanHistory> findByBookIdAndUserIdAndReturnDateIsNull(Long bookId, Long userId);
     boolean existsByBookAndUserAndReturnDateIsNull(Book book, User user);
 }

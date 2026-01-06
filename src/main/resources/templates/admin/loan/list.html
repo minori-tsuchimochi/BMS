@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>貸出中一覧（管理者）</title>
+</head>
+<body>
+
+<h1>貸出中一覧</h1>
+
+<table border="1">
+    <tr>
+        <th>書名</th>
+        <th>利用者</th>
+        <th>貸出日</th>
+        <th>返却期限</th>
+        <th>操作</th>
+    </tr>
+
+    <tr th:each="loan : ${loans}">
+        <td th:text="${loan.book.title}"></td>
+        <td th:text="${loan.user.username}"></td>
+        <td th:text="${loan.loanDate}"></td>
+        <td th:text="${loan.dueDate}"></td>
+        <td>
+            <form th:action="@{/admin/loans/{id}/return(id=${loan.id})}"
+                  method="post"
+                  style="display:inline;">
+                <button type="submit">返却</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<br>
+<a th:href="@{/admin/books}">蔵書一覧📚</a>
+
+</body>
+</html>

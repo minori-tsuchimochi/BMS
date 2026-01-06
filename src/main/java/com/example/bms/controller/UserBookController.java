@@ -2,6 +2,7 @@ package com.example.bms.controller;
 
 import com.example.bms.entity.Book;
 import com.example.bms.entity.User;
+import com.example.bms.entity.LoanHistory;
 import com.example.bms.repository.BookRepository;
 import com.example.bms.repository.LoanHistoryRepository;
 import com.example.bms.service.LoanService;
@@ -52,9 +53,14 @@ public class UserBookController {
     }
 
     @PostMapping("/{id}/return")
-    public String returnBook(@PathVariable Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("書籍が存在しません"));
-        loanService.returnBook(book);
+    public String returnBook(@PathVariable Long id, Authentication authentication) {
+        User user = userService.findByUsername(authentication.getName());
+
+        LoanHistory history = loanHistoryRepository
+                .findByBookIdAndUserIdAndReturnDateIsNull(id, user.getId())
+                .orElseThrow(() -> new IllegalStateException("貸出履歴が見つかりません"));
+
+        loanService.returnLoan(history.getId());
         return "redirect:/books";
     }
 }

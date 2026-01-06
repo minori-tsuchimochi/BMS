@@ -4,12 +4,11 @@ import com.example.bms.entity.Book;
 import com.example.bms.entity.LoanHistory;
 import com.example.bms.entity.User;
 import com.example.bms.repository.BookRepository;
-import com.example.bms.repository.UserRepository;
 import com.example.bms.repository.LoanHistoryRepository;
+import com.example.bms.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class LoanService {
@@ -42,17 +41,18 @@ public class LoanService {
     }
 
     @Transactional
-    public void returnBook(Book book) {
-        List<LoanHistory> histories = loanHistoryRepository.findByBookAndReturnDateIsNull(book);
+    public void returnLoan(Long loanHistoryId) {
+        LoanHistory history = loanHistoryRepository.findById(loanHistoryId)
+                .orElseThrow(() -> new IllegalArgumentException("貸出履歴が存在しません"));
 
-        if (histories.isEmpty()) {
-            throw new IllegalStateException("貸出履歴が見つかりません");
+        if (history.getReturnDate() != null) {
+            throw new IllegalStateException("既に返却済みです");
         }
 
-        LoanHistory history = histories.get(histories.size() - 1);
         history.setReturnDate(LocalDate.now());
-        loanHistoryRepository.save(history);
+        Book book = history.getBook();
         book.setStock(book.getStock() + 1);
+        loanHistoryRepository.save(history);
         bookRepository.save(book);
     }
 

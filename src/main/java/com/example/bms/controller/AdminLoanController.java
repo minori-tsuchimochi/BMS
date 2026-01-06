@@ -2,7 +2,9 @@ package com.example.bms.controller;
 
 import com.example.bms.entity.Book;
 import com.example.bms.entity.User;
+import com.example.bms.entity.LoanHistory;
 import com.example.bms.repository.BookRepository;
+import com.example.bms.repository.LoanHistoryRepository;
 import com.example.bms.service.LoanService;
 import com.example.bms.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,11 +23,13 @@ public class AdminLoanController {
     private final LoanService loanService;
     private final BookRepository bookRepository;
     private final UserService userService;
+    private final LoanHistoryRepository loanHistoryRepository;
 
-    public AdminLoanController(LoanService loanService, BookRepository bookRepository, UserService userService) {
+    public AdminLoanController(LoanService loanService, BookRepository bookRepository, UserService userService, LoanHistoryRepository loanHistoryRepository) {
         this.loanService = loanService;
         this.bookRepository = bookRepository;
         this.userService = userService;
+        this.loanHistoryRepository = loanHistoryRepository;
     }
 
     @GetMapping("/books")
@@ -90,6 +94,19 @@ public class AdminLoanController {
     ) {
         loanService.loan(bookId, userId, LocalDate.parse(dueDate));
         return "redirect:/admin/books";
+    }
+
+    @GetMapping("/loans")
+    public String loanList(Model model) {
+        List<LoanHistory> loans = loanHistoryRepository.findByReturnDateIsNullOrderByLoanDateAsc();
+        model.addAttribute("loans", loans);
+        return "admin/loan/list";
+    }
+
+    @PostMapping("/loans/{id}/return")
+    public String returnLoan(@PathVariable Long id) {
+        loanService.returnLoan(id);
+        return "redirect:/admin/loans";
     }
 
 }
