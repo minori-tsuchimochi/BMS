@@ -21,7 +21,7 @@ jobs:
           java-version: '21'
 
       - name: gradlew に実行権限を付与
-        run: chmod +x bms/gradlew
+        run: chmod +x gradlew
 
       - name: ビルド実行
-        run: cd bms && ./gradlew cl
+        run: ./gradlew clean build
