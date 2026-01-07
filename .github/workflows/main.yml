@@ -14,14 +14,14 @@ jobs:
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v4
 
-      - name: JDK 21 をセットアップ
+      - name: Java 21 セットアップ
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Gradle のキャッシュ設定
-        uses: gradle/actions/setup-gradle@v4
+      - name: gradlew に実行権限を付与
+        run: chmod +x bms/gradlew
 
-      - name: ビルド＆テスト
-        run: ./gradlew clean build
+      - name: ビルド実行
+        run: cd bms && ./gradlew cl
