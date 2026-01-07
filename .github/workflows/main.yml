@@ -1,0 +1,27 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Java 21 セットアップ
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: gradlew に実行権限を付与
+        run: chmod +x gradlew
+
+      - name: ビルド実行
+        run: ./gradlew clean build
