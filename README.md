@@ -1,5 +1,7 @@
  # BMS (Book Management System)<br>研修成果物 仕様書
 
+ [![Java CI with Gradle](https://github.com/minori-tsuchimochi/BMS/actions/workflows/main.yml/badge.svg)](https://github.com/minori-tsuchimochi/BMS/actions/workflows/main.yml)
+
 ## 1. 概要
 本システムは、図書館や社内図書コーナーにおける蔵書の
 登録・検索・貸出／返却 を管理するWebアプリケーションである。
